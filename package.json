@@ -9,6 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.4.2",
+    "@react-google-maps/api": "^2.20.7",
+    "@supabase/ssr": "^0.7.0",
+    "geist": "^1.5.1",
     "next": "16.0.3",
     "react": "19.2.0",
     "react-dom": "19.2.0"
