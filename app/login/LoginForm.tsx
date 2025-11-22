@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { login } from "./actions"; // Importamos la Server Action del paso 3
+import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { login } from "./actions";
 
 export default function LoginForm() {
-  // Estado para manejar el mensaje de error
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -14,18 +15,13 @@ export default function LoginForm() {
     setError(null);
 
     const formData = new FormData(event.currentTarget);
-    
-    // Llamamos a la Server Action.
-    // La acción 'login' o redirigirá al usuario (si es exitosa)
-    // o devolverá un objeto con un mensaje de error.
+
     try {
       const result = await login(formData);
-      
+
       if (result?.error) {
         setError(result.error);
       }
-      // Si el login es exitoso, la Server Action 'redirect()' tomará el control
-      // y esta parte del código no se ejecutará.
     } catch (e) {
       setError("Ocurrió un error inesperado. Intente de nuevo.");
     }
@@ -34,57 +30,93 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
       {/* Mensaje de Error */}
       {error && (
-        <div className="p-3 bg-red-100 text-red-700 border border-red-300 rounded-md">
+        <div className="p-3 bg-red-50 text-red-600 border border-red-200 rounded-lg text-sm">
           {error}
         </div>
       )}
 
+      {/* Campo Email */}
       <div>
         <label
           htmlFor="email"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-gray-700 mb-2"
         >
-          Correo Electrónico
+          Email
         </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          autoComplete="email"
-          required
-          disabled={isLoading}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-        />
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Mail className="h-5 w-5 text-gray-400" />
+          </div>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+            disabled={isLoading}
+            placeholder="Ingresa tu email"
+            className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+          />
+        </div>
       </div>
 
+      {/* Campo Contraseña */}
       <div>
         <label
           htmlFor="password"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-gray-700 mb-2"
         >
           Contraseña
         </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          disabled={isLoading}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-        />
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Lock className="h-5 w-5 text-gray-400" />
+          </div>
+          <input
+            id="password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            autoComplete="current-password"
+            required
+            disabled={isLoading}
+            placeholder="Ingresa tu contraseña"
+            className="block w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+          >
+            {showPassword ? (
+              <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+            ) : (
+              <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+            )}
+          </button>
+        </div>
       </div>
 
+      {/* Botón Ingresar */}
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+        className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition"
       >
-        {isLoading ? "Cargando..." : "Iniciar Sesión"}
+        {isLoading ? "Cargando..." : "Ingresar"}
       </button>
+
+      {/* Link Olvidaste contraseña */}
+      <div className="text-center">
+        <a
+          href="#"
+          className="text-sm text-blue-600 hover:text-blue-700 hover:underline"
+        >
+          ¿Olvidaste tu contraseña?
+        </a>
+      </div>
     </form>
   );
 }

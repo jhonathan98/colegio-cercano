@@ -10,6 +10,11 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  /* Sage color palette */
+  --color-sage-400: #a3b18a;
+  --color-sage-500: #738a65;
+  --color-sage-600: #588157;
 }
 
 @media (prefers-color-scheme: dark) {
